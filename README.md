@@ -1,5 +1,21 @@
 # ComfyUI Agent Bridge
 
+> **DSH-only plugin / 为 DSH 打造的插件**
+>
+> This node was written **for [DSH (DeepSeek Harness)](https://github.com/hallozyf)** —
+> the desktop agent runtime whose LLM tool loop drives ComfyUI. Its endpoint shapes
+> (`/agent/txt2img` → `prompt_id` → `/agent/result/{id}`), preset defaults, automatic
+> loader selection and error messages all assume **an agent is driving, not a human
+> clicking the canvas**. It is installed like any custom node, but treat it as a
+> DSH-side integration: the `dsh/*` output subfolder, the auto model picking and the
+> "one call in, image out" contract are not aimed at interactive use.
+>
+> It is not technically locked to DSH — any HTTP client (curl, Python, another agent
+> framework) can call the same endpoints — but DSH is the only environment it was
+> built and verified in. If you are looking for a GUI-side helper node, this is not it.
+>
+> 中文说明见文末「关于 DSH」一节。
+
 Agent-friendly REST endpoints for [ComfyUI](https://github.com/comfyanonymous/ComfyUI),
 packaged as a normal custom node. Text-to-image becomes **one HTTP call** instead of
 hand-assembling an API-format prompt graph.
@@ -159,6 +175,19 @@ MIT — see [LICENSE](LICENSE).
 ---
 
 # 中文说明
+
+## 关于 DSH（重要）
+
+**这个插件是给 DSH（DeepSeek Harness）专用的**，不是通用 ComfyUI 插件：
+
+- 它是在 DSH 里写出来并验证的，接口形状（一次提交拿 `prompt_id`、再轮询 `result`）就是按
+  LLM 工具循环设计的，目的是让智能体少绕弯路；
+- 默认值、模型自动选型、报错文案都按「智能体在驱动」而不是「人在点界面」来设计
+  （比如自动挑 GGUF 还是 safetensors、自动补 `filename_prefix`、错误直接告诉缺哪个节点）；
+- 出图默认落在 `dsh/<preset>` 子目录，这是 DSH 会话的归档约定。
+
+它**不锁定** DSH：任何 HTTP 客户端（curl / Python / 别的 agent 框架）都能直接调同样接口；
+但 DSH 是唯一经过完整验证的环境。如果你要的是「在界面上点着用」的节点，这个不是。
 
 ## 这是什么
 
